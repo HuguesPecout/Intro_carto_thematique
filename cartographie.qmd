@@ -1,0 +1,2010 @@
+---
+title: "Cartographie thématique"
+subtitle: "Introduction et mise en application avec MAGRIT"
+img: figure/cover.png
+# date: 
+author: Hugues Pecout (CNRS, UMR Géographie-Cités)
+institute: "MASTER Géomatique - Université du Sine Saloum El-hâdj ibrahima NIASS"
+lang: fr
+editor: source
+format:
+  revealjs: 
+    include-in-header:
+      - text: |
+          <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js""></script>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              $('body').prepend('<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>');
+              // onClick function for all plots (img's)
+              $('img:not(.zoomImg)').click(function() {
+                $('.zoomImg').attr('src', $(this).attr('src')).css({width: '100%'});
+                $('.zoomDiv').css({opacity: '1', width: 'auto', border: '1px solid white', borderRadius: '5px', position: 'fixed', top: '50%', left: '50%', marginRight: '-50%', transform: 'translate(-50%, -50%)', boxShadow: '0px 0px 50px #888888', zIndex: '50', overflow: 'auto', maxHeight: '100%'});
+              });
+              // onClick function for zoomImg
+              $('img.zoomImg').click(function() {
+                $('.zoomDiv').css({opacity: '0', width: '0%'}); 
+              });
+            });
+          </script>
+
+    template-partials:
+      - title-slide.html
+    theme: white
+    logo: figure/cnrs.png
+    footer: "**MASTER Géomatique (USSEIN)** - *Cartographie thématique & MAGRIT, 2023*"
+    scrollable: TRUE
+    smaller: TRUE
+    overview: TRUE
+    chalkboard: FALSE
+    transition: fade
+    transition-speed: fast
+    menu: TRUE
+    css: style.css
+---
+
+# Qu'est-ce qu'une carte ?
+
+## Une représentation du réel...
+
+::: columns
+::: {.column .center width="53%"}
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/carte-territoire.png){width="85%"}
+:::
+
+::: {.column width="47%"}
+::: center
+![La trahison des images de René Magritte (1929)](figure/magritte.jpg){style="margin-top:12px;"}
+:::
+:::
+:::
+
+::: center
+[**Mais pas de la réalité !**]{.bluelg .p_m}
+:::
+
+\
+
+::: columns
+::: {.column .center .border2 width="46%"}
+[**Une carte est une représentation géométrique plane, simplifiée et conventionnelle de tout ou partie de la surface terrestre, et cela dans un rapport de similitude convenable qu’on appelle échelle.**]{.p_xsm}\
+[Fernand Joly, 1976]{.p_xsm .bluelg}
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .center .border2 width="48%"}
+[**Une carte est une image simplifiée et codifiée de l'espace géographique, qui représente ses caractèristiques et/ou son organisation. Elle résulte de l'acte créateur et des choix de son auteurs.**]{.p_xsm}\
+[N. Lambert & C. Zanin, 2017]{.p_xsm .bluelg}
+:::
+:::
+
+## Cartographie
+
+[**La cartographie** est une discipline (composante de la géomatique) qui a pour objectif la construction de cartes. c’est à la fois une **discipline scientifique**, **technique** et **artistique**.]{.p_sm}
+
+\
+
+::: columns
+::: {.column width="31%"}
+::: {.bluelg .list3 .center}
+Une science
+:::
+
+::: p_xsm
+Les **bases sont mathématiques** (système de coordonnées de référence et projection). L’enjeu est la **précision et la fiabilité**. La représentation cartographique est régie par des règles de **sémiologie graphique**.
+:::
+
+![](figure/lambert.jpg){width="100%"}
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="31%"}
+::: {.bluelg .list3 .center}
+Une technique
+:::
+
+::: p_xsm
+Nécessite un vaste **savoir faire opérationnel** : acquisition de données, préparation et traitement de données, maîtrise de logiciels spécialisés…
+:::
+
+![](figure/technique_carto.png){width="100%"}
+:::
+
+::: {.column width="3%"}
+:::
+
+::: {.column width="31%"}
+::: {.bluelg .list3 .center}
+Un art
+:::
+
+::: p_xsm
+Recherche d’**esthétisme**. Comme pour tout objet de communication, le graphisme d’une carte à un impact sur la transmission du message.
+:::
+
+![](figure/art.png){width="85%"}
+:::
+:::
+
+**Le cartographe** est l'individu qui maîtrise les méthodes, techniques et concepts de mise en page de l'information géographique.
+
+## Deux grandes catégories
+
+[**Il existe une multitude de cartes géographiques** : carte météo, géologique, de végétation, climatique, touristique, d’inventaire, routière, animée, interactive, spatiocarte…. Mais deux grandes catégories se dégagent :]{.p_sm}
+
+::: columns
+::: {.column width="45%"}
+::: {.bluelg .list3 .center}
+Cartes topographiques
+:::
+
+::: p_xsm
+Cartes sur lesquelles figurent essentiellement les résultats des observations directes : reliefs, cours d'eau, aménagement humain, etc. Elles sont la représentation des éléménts concrets, fixes et durables, existant sur une portion d'espace terrestre à un moment donné.
+:::
+
+![](figure/IGN_map.png){width="100%"}
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column width="54%"}
+::: {.bluelg .list3 .center}
+Cartes thématiques
+:::
+
+::: p_xsm
+Cartes sur lesquelles sont représentés des phénomènes localisables, qualitatifs ou quantitatifs, de toute nature. La représentation de l'information s'y effectue selon les règles de la sémiologie graphique. Ces cartes sont habillées et mise en scène de façon à produire une image intelligible du phénomène géographique représenté.
+:::
+
+![](figure/fig_lambert.png)
+:::
+:::
+
+## La carte thématique
+
+[**Carte représentant sur un fond repère** topographique, hydrographique, chorographique ou géographique, **des phénomènes localisables de toute nature, qualitatifs ou quantitatifs**]{.p_sm}
+
+::: columns
+::: {.column width="78%"}
+![](figure/rideau_fer.png)
+:::
+
+::: {.column width="22%"}
+\
+
+::: p_xsm
+**La cartographie thématique est un outil d’analyse, d’aide à la décision et de communication** largement utilisé pour représenter une ou plusieurs variables.
+
+C'est un **moyen très efficace d’exprimer des idées et de repérer des phénomènes** qui ne le seraient pas (ou plus difficilement) par d’autres moyens.
+
+Cest un **document graphique basé sur la communication par les signes. Elle relève du langage visuel**, sa construction doit suivre **les règles de la sémiologie graphique**.
+:::
+:::
+:::
+
+## Les fondamentaux
+
+\
+
+::: center
+[**L’efficacité d’une carte thématique réside dans le temps nécessaire pour mémoriser correctement l’information qui veut être transmise**.]{.p_l}
+
+\
+
+[Pour cela, il ne faut jamais oublier :]{.p_l}
+
+\
+
+[1. L’objectif de la carte et le public visé]{.p_lg .bluelg}
+
+\
+
+[2. Les codes et conventions de la cartographie]{.p_lg .bluelg}
+
+\
+
+[3. Les règles de la sémiologie graphique]{.p_lg .bluelg}
+:::
+
+## Un public, un objectif et un message
+
+::: columns
+::: {.column width="60%"}
+![](figure/caterEX.png)
+:::
+
+::: {.column width="40%"}
+\
+
+::: p_sm
+**On ne réalise pas la même carte en fonction du public ciblé, de l’objectif** (opérationnel, décisionnel, communication...) **et du message** que le cartographe souhaite transmettre. Cela influence directement :
+
+::: blue
+-   L’**emprise** et la **projection** utilisées
+-   La **généralisation** du fond de carte
+-   Les **choix graphiques**
+-   Le **vocabulaire** utilisé
+:::
+:::
+
+\
+
+::: center
+Cliquez [**ici**](https://www.youtube.com/watch?v=uicwYbendUk){target="_blank"} si vous en doutez !
+:::
+:::
+:::
+
+## Code et convention cartographique
+
+::: columns
+::: {.column width="61%"}
+![](figure/caterEX.png)
+:::
+
+::: {.column width="39%"}
+\
+
+::: p_sm
+Les **éléments obligatoires** d’une carte :
+
+::: {.blue .p_list}
+-   Un **titre**
+-   Une **date**
+-   Une **légende**
+-   Une **source**
+-   Un **auteur**
+-   Une **échelle** (optionnel\*)
+-   Une **orientation** (optionnel\*)
+:::
+
+\
+
+Spécificités selon les pays/cultures, ex :
+
+::: p_xxsm
+-   Utilisation de couleurs froides vers couleurs chaudes ou d’intensité croissante pour signifier l’intensité ou l’abondance.
+
+-   Utilisation de certaines couleurs très connotées
+:::
+:::
+:::
+:::
+
+## Sémiologie graphique
+
+\
+
+::: {.p_sm .center}
+**Utilisation de variables visuelles en fonction de la [nature des données]{.bluelg} et de leur [type d'implantation]{.bluelg}.**
+:::
+
+::: center
+![](figure/Zanin_Tremelo.png){width="95%"}
+:::
+
+# Systèmes de coordonnées de référence
+
+## Localisation de l'information géographique
+
+[Pour être cartogarphiée, une information géographique est forcément décrite par **une position** et **une forme** **sur la surface de la Terre**.]{.p_l}
+
+\
+
+::: {.p_lg .center}
+-   Sur [**quel référentiel**]{.bluelg} se base-t-on pour localiser un objet sur Terre ?
+
+\
+
+-   Comment détermine-t-on les [**coordonnées géographiques**]{.bluelg} d’un objet ?
+
+\
+
+-   Qu’est-ce qu’une [**projection cartographique**]{.bluelg} ?
+:::
+
+## Modéliser pour localiser
+
+[La planète Terre n’est pas une sphère, c'est à dire une forme géométrique parfaite… Elle est **légèrement aplatie aux pôles et bosselée selon les continents**. Son apparence sphérique lorsqu’on l’observe depuis l’espace masque les nombreuses petites irrégularités de sa surface.]{.p_l}
+
+::: center
+![Source : NASA, University of Texas for Space Research, 2002](figure/globe.gif){width="35%"}
+:::
+
+## Le géoïde terrestre
+
+[**Toute mesure ayant besoin d’une référence**,]{.p_l} [**on modélise la forme de la Terre selon le modèle théorique du géoïde.**]{.p_l .bluelg}
+
+::: columns
+::: {.column width="50%"}
+::: center
+![](figure/geoide2.png){width="100%"}
+:::
+:::
+
+::: {.column width="50%"}
+[**Un géoïde est une**]{.p_m} [**surface équipotentielle du champ de pesanteur coïncidant « au mieux » avec le niveau moyen des océans et qui se prolonge sous les continents.**]{.p_m .bluelg}
+
+\
+
+[**La surface du géoïde équivaut au niveau d’altitude 0 à l’échelle mondiale. La notion d’altitude traduit donc la hauteur au-dessus du géoide.**]{.p_m}
+
+\
+
+[Pour la France, il est calé sur un niveau zéro scellé dans le port de Marseille.]{.p_m}
+:::
+:::
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/geoide.png)
+
+## Formalisation mathématique du géoïde
+
+[**Le géoïde est une surface diforme**]{.p_m .bluelg}[, **à laquelle on ne saurait appliquer des relations mathématiques**.]{.p_m} [**Pour modéliser cette surface**,]{.p_m} [**on utilise une figure géométrique régulière : l’ellipsoïde.**]{.p_m .bluelg}
+
+\
+
+::: center
+![](figure/AnimationSphere2.GIF){width="30%"}
+
+\
+
+[Il s’agit d’un volume globalement sphérique présentant un aplatissement aux pôles.]{.p_m}
+:::
+
+## L’ellipsoïde terrestre
+
+[**L’ellipsoïde est la surface mathématique qui se rapproche le plus du géoïde**.]{.p_m .bluelg} [Elle sert de référence pour la construction des projections cartographiques. **Positionner l’ellipsoïde en fonction du géoïde permet de construire un système géodésique.**]{.p_m}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/ellipse.png){width="92%"}
+:::
+
+## Écart Ellipsoïde vs Géoïde
+
+::: columns
+::: {.column width="65%"}
+![](figure/geoide.jpg){width="100%"}
+:::
+
+::: {.column width="35%"}
+\
+\
+\
+
+[**Les couleurs traduisent l’écart entre le géoïde et l’ellipsoïde. Elle ne dépasse pas 110 mètres.**]{.p_m}
+
+\
+
+[Si la forme de la terre n’est pas régulière, elle se rapproche donc fortement d’un ellipsoïde.]{.p_m}
+:::
+:::
+
+[Il est important de noter que]{.p_l} [l’altitude d’un point est calculé par rapport à son l’éloignement vertical à la surface du géoïde et non à celle de l’éllipsoïde de référence.]{.p_l .bluelg}
+
+::: center
+![](figure/I.02.geoide.png){width="80%"}
+:::
+
+## Les systèmes géodésiques
+
+[**Un système géodésique sert de repère pour déterminer les coordonnées géographiques (ou géodésiques) d’un objet à la surface de la Terre**.]{.p_l} [**Ces coordonnées sont des valeurs angulaires, calculées par rapport à un parallèle (équateur) et un méridien de référence (Greenwich).**]{.p_l .bluelg} [Les coordonées d’un objet traduit deux dimensions : **la latitude et la longitude**.]{.p_l}
+
+::: columns
+::: {.column width="50%"}
+![](figure/meridien_paral1.gif){width="75%"}
+:::
+
+::: {.column width="50%"}
+![](figure/sphere_lat_long.png){width="75%"}
+:::
+:::
+
+## Les coordonnées géographiques
+
+[Les coordonnées géographiques peuvent être exprimées en]{.p_l} [Degrés Décimaux (DD)]{.p_l .bluelg} [ou en]{.p_l} [Degrés-Minutes-Secondes (DMS)]{.p_l .bluelg}
+
+\
+\
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/latlon.png){width="70%"}
+:::
+
+## Systèmes géodésiques de référence
+
+[Un même ellipsoïde peut être positionné différement par rapport au géoïde, et ainsi constituer des systèmes de référence géodésiques différents.]{.p_l} [**Le même objet n’aura pas les mêmes coordonnées géographiques dans différents systèmes géodésiques**.]{.p_l .bluelg}
+
+\
+
+::: panel-tabset
+## Systèmes géodésiques globaux
+
+\
+
+-   [**WSG84** (World Geodetic System 1984)]{.p_l}\
+    [Le plus utilisé au monde. C’est ce système géodésique qui est utilisé pour le système de positionnement par satellites (GPS)]{.p_m}
+
+\
+
+-   [**ITRS** (International Terrestrial Reference System)]{.p_l}\
+    [Le plus précis à l’échelle mondiale (précision centimétrique)]{.p_m}
+
+## Système géodésique français (local)
+
+\
+
+-   [**NTF** (Nouvelle Triangulation de la France)]{.p_l}\
+    [Ancien système géodésique français de référence, couvrant le territoire métropolitain]{.p_m}
+
+\
+
+-   [**RGF93** (Réseau Géodésique Français 1993)]{.p_l}\
+    [Système géodésique officiel en France métropolitaine]{.p_m}
+
+## Système géodésique sénégalais ?
+:::
+
+# Les projections cartographiques
+
+## Projeter pour représenter sur un plan
+
+[Un système géodésique permet de localiser un objet sur une surface en 3 dimensions. Mais]{.p_l} [comment représenter l’information géographique sur un plan en deux dimensions, c'est à dire sur une carte ?]{.p_l .bluelg}
+
+![](figure/orange.png)
+
+## Projeter = déformer !
+
+[Une projection est un procédé mathématique permettant de passer de l’ellipsoïde à sa représentation sur une surface plane.]{.p_l} [**Toutes les projections provoquent des déformations**. Plus l’espace représenté est vaste, plus les altérations sont importantes.]{.p_l .bluelg}
+
+::: columns
+[**L’indicatrice de Tissot** permet d’apprécier la déformation engendrée par un système de projection.]{.p_sm}
+
+::: {.column width="40%"}
+![](figure/deformation2.png)
+:::
+
+::: {.column width="60%"}
+![](figure/deformation1.png)
+
+Une forme géométrique (cercle ou ellipse) est utilisée pour représenter les altérations des surfaces et/ou des angles.
+:::
+:::
+
+## Classification des projections
+
+[Les projections cartographiques peuvent se classer selon :]{.p_l}
+
+::: columns
+::: {.column width="40%"}
+[1. la surface de projection]{.p_l .bluelg}
+
+\
+
+[**Un ellipsoïde peut être projeté sur différentes surfaces**, facilement représentables en deux dimensions.]{.p_m}
+
+\
+
+[Les projections peuvent ainsi être classées en projection]{.p_m} [**conique**]{.p_m .bluelg}[,]{.p_m} [**cylindrique**]{.p_m .bluelg} [ou]{.p_m} [**azimutale**]{.p_m .bluelg}[.]{.p_m}
+:::
+
+::: {.column width="60%"}
+![](figure/surface_proj.png){width="80%"}
+:::
+:::
+
+::: center
+[**Les surfaces peuvent être tangentes ou sécantes, et orientées de différentes façons :**]{.p_m}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/surface_proj_2.png){width="70%"}
+
+\
+
+[**Pour résumer :**]{.p_m}
+
+![](figure/aspects_all.jpg){width="70%"}
+:::
+
+## Classification des projections
+
+[2. le type d’altération]{.p_l .bluelg}
+
+::: center
+![](figure/proj2.png){width="80%"}
+:::
+
+[Projection conforme]{.p_m .bluelg} [: conserve localement les angles, donc les formes. Les méridiens et parallèles se coupent à angle droit. Les **surfaces et les distances sont déformées**. Ce type de projection peut être utilisé pour la naviguation maritime.]{.p_m}
+
+[Projection équivalente]{.p_m .bluelg} [: conserve localement les surfaces, mais au prix d’une **déformation des distances et des angles** sur la carte.]{.p_m}
+
+[Projection aphylactique]{.p_m .bluelg} [: ni conforme, ni équivalente, mais qui cherche à faire un **compromis acceptable entre les inévitables déformations des surfaces, des distances et des angles** sur une carte.Ces projections peuvent également être équidistante. C’est a dire qu’elles conservent les distances sur les méridiens.]{.p_m}
+
+## Projection conforme
+
+[**Conserve les angles** (formes) mais pas les surfaces (distances).]{.p_l}
+
+::: columns
+::: {.column width="55%"}
+![](figure/mercator.jpg)
+:::
+
+::: {.column .center width="45%"}
+\
+
+[Ex :]{.p_l} [**Projection Mercator**]{.p_l .bluelg}
+
+[Gerardus Mercator (1569)]{.p_m}
+
+![](figure/deformation2.png){width="60%"}\
+[**Cylindrique & conforme**]{.p_m}
+:::
+:::
+
+\
+
+[**Projection conforme vs réalité ?**]{.p_lg}
+
+::: panel-tabset
+## Scandinavie vs Inde
+
+![](figure/conforme1.png)
+
+## Afrique vs Russie
+
+![](figure/conforme2.png)
+
+## Amérique du Sud vs Groënland
+
+![](figure/conforme3.png)
+
+## Outil d'exploration
+
+::: center
+[**https://thetruesize.com**](https://thetruesize.com){target="_blank"}
+:::
+
+![source : https://thetruesize.com](figure/truesize.PNG)
+:::
+
+## Projection équivalente
+
+[**Conserve les surfaces** (distances) mais pas les angles (formes).]{.p_l}
+
+::: columns
+::: {.column width="65%"}
+![](figure/gall_peters.jpg)
+:::
+
+::: {.column .center width="35%"}
+\
+
+[Ex :]{.p_l} [**Projection Gall–Peters**]{.p_l .bluelg}
+
+[James Gall et Arno Peters (1855)]{.p_m}
+
+\
+
+![](figure/deformation1.png)
+
+[**Cylindrique & équivalente**]{.p_m}
+:::
+:::
+
+## Projection aphylactique
+
+[Ne conserve ni les formes, ni les surfaces. **Compromis d’altération entre projection conforme et équivalente**.]{.p_l}
+
+::: columns
+\
+
+::: {.column width="65%"}
+![](figure/Natural_Earth.JPG)
+:::
+
+::: {.column .center width="35%"}
+[Ex :]{.p_l} [**Projection Natural Earth**]{.p_l .bluelg}
+
+[Tom Patterson (2011)]{.p_m}
+
+![](figure/Natural_Earth_Tissot.svg)
+
+[**Pseudo-cylindrique & aphylactique**]{.p_sm}
+:::
+:::
+
+## Projection aphylactique equidistante
+
+[La distance et la direction, mesurées à partir du point central, sont toutes deux exactes.]{.p_l}
+
+::: columns
+::: {.column width="50%"}
+![](figure/postel.jpg){width="90%"}
+:::
+
+::: {.column .center width="50%"}
+\
+
+[Ex :]{.p_l} [**Projection Postel**]{.p_l .bluelg}
+
+[Al-Biruni (1000 envir.)]{.p_m}
+
+![](figure/postel_tissot.png){width="50%"}
+
+[**Azimutale & équidistante**]{.p_m}
+:::
+:::
+
+## Quelle projection choisir ?
+
+[Le choix d’une projection cartographique ne se fait pas de manière aléatoire :]{.p_l}
+
+\
+
+::: columns
+::: {.column .center .border width="45%"}
+[**I.**]{.p_xlg .bluelg}
+
+[**C’est la zone représentée, la thématique et l’objectif de la carte qui vous permettront de choisir une projection.**]{.p_m}
+:::
+
+::: {.column width="1%"}
+:::
+
+::: {.column .center .border width="40%"}
+[**II.**]{.p_xlg .bluelg}
+
+[**Dans certains pays, vous êtes soumis à des normes** si vous travaillez dans le cadre d’une mission de service public.]{.p_m}
+:::
+:::
+
+\
+\
+
+[Par exemple, en France :]{.p_m .bluelg}
+
+-   Toutes les administrations de l’État, collectivités locales et entreprises chargées de l’exécution d’une mission de service public doivent utiliser le système géodésique de référence RGF93 pour leurs échanges de données géoréférencées.
+
+-   Les cartes officielles représentant l’ensemble de la France métropolitaine doivent être projetées en Lambert93 Conique Conforme. 9 variantes de cette projection existent ( Lambert CC 9 zones). Elles couvrent 9 zones s’étalant du Nord au Sud et doivent être utilisées pour la cartographie locale.
+
+# Le fond de carte
+
+## La généralisation
+
+[A. La généralisation d'un fond de carte **répond à plusieurs objectifs** :]{.p_m}
+
+-   **Pragmatique** : [améliorer la lisibilité de la carte en évitant les empâtements]{.bluelg}
+-   **Scientifique** : [éliminer toute surcharge graphique (bruit) pouvant nuire au message de la carte]{.bluelg}
+-   **Technique** : [diminuer le nombre de coordonnées stockées en mémoire]{.bluelg}
+-   **Esthétique** : [dessiner un territoire selon un style graphique défini]{.bluelg}
+
+\
+
+[B. La généralisation **dépend de** :]{.p_m}
+
+-   [l'échelle de la carte]{.bluelg}
+-   [Choix humains]{.bluelg}
+
+\
+
+[C. Le processus de généralisation **se décompose en plusieurs opérations** :]{.p_m}
+
+::: panel-tabset
+## **Sélection**
+
+::: center
+[La selection consiste au choix des éléments des éléments à représenter. Ici, on élimine les îles (critère de surface) :]{.p_b}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/selection.png)
+:::
+
+## **Schématisation structurale**
+
+::: center
+[La schématisation structurale consiste en une simplification des tracés :]{.p_b}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/shematisation2.png)
+:::
+
+## **Schématisation conceptuelle**
+
+::: center
+[La schématisation conceptuelle est une simplification qui intègre des éléments d’interprétation (agrégations d’objets, changement de figuration, etc). On la retrouve beaucoup dans les cartes topographiques.]{.p_b}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/conceptuelle.png)
+:::
+
+## **Harmonisation**
+
+::: center
+[L’harmonisation est une opération d’homogénéisation générale du fond carte entre tous les éléments qui le composent.]{.p_b}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/harmonisation.png)
+:::
+:::
+
+## Emprise, centrage et orientation
+
+::: columns
+::: {.column width="67%"}
+[Le choix de l'emprise permet d'éviter les espaces vides sur la carte, d'exclure un élément, de maximiser la place de l'information à représenter...Cela revient à]{.p_sm} [orienter la lecture de la carte.]{.p_sm .bluelg}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/emprise.png){width="100%"}
+:::
+:::
+
+::: {.column .center width="33%"}
+![](figure/emprise_exemple.png)
+:::
+:::
+
+\
+
+[Il n’y a pas de règle pour l’orientation et le centrage d’une projection, mais ce choix n’est pas anodin…]{.p_sm}
+
+::: columns
+::: {.column .center width="33%"}
+![Le monde selon l'Europe et L'Afrique](figure/centre_fr.jpg)
+:::
+
+::: {.column .center width="33%"}
+![Le monde selon les États-Unis](figure/centre_us.jpg)
+:::
+
+::: {.column .center width="33%"}
+![Le monde selon la Chine](figure/centre_china.jpeg)
+:::
+
+::: {.column .center width="33%"}
+![Le monde selon le Japon](figure/centre_japan.jpg)
+:::
+
+::: {.column .center width="33%"}
+![Le monde selon l'Australie](figure/centre_austra.jpg)
+:::
+
+::: {.column .center width="33%"}
+![Le monde selon l'ONU](figure/centre_onu.png){width="85%"}
+:::
+:::
+
+# Sémiologie graphique et variables visuelles
+
+## Les règles de la sémiologie graphique
+
+::: {.center .p_m}
+Le langage cartographique a été théorisé par [Jacques Bertin]{.bluelg} (1967).
+:::
+
+::: columns
+::: {.column width="27%"}
+![](figure/bertin_1.jpg)
+:::
+
+::: {.column .p_sm width="46%"}
+\
+
+« Si pour obtenir une réponse correcte et complète à une question donnée (…) une construction requiert un temps d’observation plus court qu’une autre construction, on dira qu’elle est plus efficace pour cette question »
+
+\
+
+**Il développe une grammaire graphique en lien avec l’information à représenter (les données).**
+:::
+
+::: {.column width="27%"}
+![](figure/bertin_2.jpg)
+:::
+:::
+
+::: {.center .p_m}
+« [La graphique utilise les propriétés de l’image visuelle pour faire apparaître les relations de différence, d’ordre et de proportionnalité entre les données.]{.bluelg} »
+:::
+
+## Le support du langage cartographique
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/implantation.png){width="70%"}
+:::
+
+## Sept variables visuelles...
+
+\
+
+::: panel-tabset
+## **Taille**
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Taille**]{.p_lg}
+
+![](figure/VV_taille_ordre.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## **Valeur**
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Valeur**]{.p_lg}
+
+![](figure/VV_valeur.png){width="80%"}
+
+\
+
+[= **Couleur (intensité)**]{.p_lg}
+
+![](figure/VV_intensite.png){width="80%"}
+
+ \
+
+[= **Couleur (harmonique)**]{.p_lg}
+
+![](figure/VV_harmonique.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## **Couleur**
+
+\
+
+::: {.center .p_xxsm}
+![](figure/VV_couleur.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## **Forme**
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Forme**]{.p_lg}
+
+![](figure/VV_forme.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## Grain
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Grain**]{.p_lg}
+
+![](figure/VV_grain.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## Orientation
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Grain**]{.p_lg}
+
+![](figure/VV_orientation.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## Texture-structure
+
+\
+
+::: {.center .p_xxsm}
+[Variable visuelle **Texture-structure**]{.p_lg}
+
+![](figure/VV_texture_diff.png){width="80%"}
+
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+:::
+
+## ... Aux propriétés différentes
+
+\
+
+::: columns
+::: {.column width="47%"}
+![](figure/VV_prop.png)
+:::
+
+::: {.column width="53%"}
+![](figure/VV_categories.png)
+:::
+:::
+
+::: {.center .p_xxsm}
+Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
+:::
+
+## Des données aux variables visuelles
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/VV_arbre.png){width="80%"}\
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/VV_donnee_carte.png){width="80%"}
+:::
+
+## Preuve par l'exemple
+
+::: columns
+::: {.column width="40%"}
+![](figure/map_failed_1.jpg)
+:::
+
+::: {.column .center width="20%"}
+\
+\
+\
+\
+\
+\
+
+![](figure/fleche.png){width="35%"}
+:::
+
+::: {.column width="40%"}
+![](figure/map_failed_2.jpg)
+:::
+:::
+
+## Exemples
+
+::: panel-tabset
+## **Qualitatives nominales**
+
+::: center
+[Exprimer la **différenciation**]{.p_m}
+
+![](figure/VV_couleur.png){width="65%"}
+
+![](figure/VV_forme.png){width="65%"} ![](figure/VV_orientation.png){width="65%"} ![](figure/VV_texture_diff.png){width="65%"}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/efficacite_differenciation.png){width="80%"}
+
+\
+
+[Exemples :]{.p_m}
+
+![](figure/bfm.jpg)
+:::
+
+## **Quantitatives absolues**
+
+::: center
+[Exprimer des **quantités**]{.p_m}
+
+![](figure/VV_taille_prop.png){width="65%"}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/quantite_surface.png){width="80%"}
+
+\
+
+[Exemples :]{.p_m}
+
+![Ventes d’armes : le grand boom des exportations françaises, Libération (2015)](figure/armement.jpeg){width="80%"}
+
+![Les émigrants du Globe, Minard (1862)](figure/minard.JPEG){width="80%"}
+
+![les grandes villes à Macron, les périphéries à Le Pen, AFP (2017)](figure/anamorphose.png){width="60%"}
+
+![](figure/barre.png){width="80%"}
+:::
+
+## **Quantitatives relatives**
+
+::: center
+[Exprimer **l’ordre**]{.p_m}
+
+![](figure/VV_valeur.png){width="65%"}
+
+![](figure/VV_harmonique.png){width="65%"}
+
+![](figure/VV_intensite.png){width="65%"}
+
+![](figure/VV_taille_ordre.png){width="65%"}
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/VV_grain.png){width="65%"}
+
+\
+
+[Exemples :]{.p_m}
+
+![](figure/4G.jpg){width="50%"}
+:::
+
+## **Combinaison de variables**
+
+\
+
+::: center
+[Exemples :]{.p_m}
+
+![](figure/caterEX.png){width="70%"}\
+
+![](figure/ITAN_9.png){width="70%"}\
+
+![](figure/allo_afrique.jpg){width="70%"}
+:::
+:::
+
+# Cartes choroplèthes et discrétisations
+
+## Les cartes choroplèthes
+
+[Une carte choroplèthe (du grec χῶρος : « zone/région » et πλῆθος : « grand nombre, multitude ») est une carte thématique où les régions sont colorées ou remplies d’un motif qui montre une mesure statistique, telle la densité de population ou le revenu par habitant. Ce type de carte facilite la comparaison d’une mesure statistique d’une région à l’autre ou montre la variabilité de celle-ci pour une région donnée.]{.p_m}
+
+::: columns
+::: {.column width="55%"}
+![](figure/carte_choro_ex.jpg)
+:::
+
+::: {.column width="45%"}
+\
+
+[Une carte choroplèthe permet de cartographier des données quantitatives relatives (taux, ratio, indices, etc.).]{.p_m .bluelg}
+
+\
+
+[Pour que la carte soit intelligible et interprétable, les données doivent toujours être synthétisées et subdivisées en classe de valeurs. Cette procedure est souvent nommée discrétisation.]{.p_m .bluelg}
+:::
+:::
+
+## Les grands principes de la discrétisation
+
+\
+
+::: p_l
+→ Les [classes doivent être homogènes et distinctes]{.bluelg} les unes des autres
+
+\
+
+→ Le [nombre de classes doit être inférieur au nombre d’observations]{.bluelg}
+
+\
+
+→ Les [caractéristiques essentielles de la distribution doivent être préservées]{.bluelg}
+
+::: p_xxsm
+-   **Conserver l’ordre de grandeur** (étendue)\
+-   **Conserver la forme de la distribution**\
+-   **Conserver la dispersion** (maximiser l’hétérogénéité entre les classes et l’homogénéité à l’intérieur des classes)
+-   **Conserver** (ou non) **les singularités**
+:::
+
+\
+
+→ Il est préférable d’[utiliser des limites de classes arrondies ou pertinentes]{.bluelg}
+
+::: p_xxsm
+Les bornes de classes doivent être facile à lire et à mémoriser.
+:::
+:::
+
+## Comment faire ?
+
+\
+
+[1. Résumer la série statistique]{.p_l .bluelg}
+
+**→ Regarder les paramètres de position ou valeurs centrales (moyenne, médiane, mode)**\
+Ces paramètres indiquent la valeur “typique” autour de laquelle les observations sont réparties.
+
+**→ Regarder les paramètres de dispersion (écart-type, intervalle interquartile…)**\
+Ces paramètres mesurent de l’écart des valeurs d’une distribution à une valeur centrale.
+
+\
+
+[2. Analyser la forme de la distribution]{.p_l .bluelg}
+
+**→ Construire un histogramme, une boîte à moustaches, un essaim d’abeilles (beeswarm)...**
+
+::: columns
+::: {.column .center width="30%"}
+[Histogramme]{.p_xsm .bluelg}
+
+```{r}
+hist(iris$Sepal.Length, main ="", col = "#4078bc", breaks = 20)
+
+
+```
+:::
+
+::: {.column .center width="30%"}
+[Boîte de moustache]{.p_xsm .bluelg}
+
+```{r}
+boxplot(iris$Sepal.Length, horizontal = TRUE, col = "#4078bc")
+```
+:::
+
+::: {.column .center width="30%"}
+[Essaim d’abeilles]{.p_xsm .bluelg}
+
+```{r}
+# install.packages("beeswarm")
+library(beeswarm)
+beeswarm(iris$Sepal.Length, col = "#4078bc", vertical = FALSE, pch = 20, cex = 3)
+
+```
+:::
+:::
+
+[3. Déterminer les intervalles des classes]{.p_l .bluelg}
+
+Il existe de nombreuses méthodes plus ou moins adaptées aux différentes formes de discrétisation....
+
+::: p_l
+::: callout-important
+## Il n’y a pas UNE discrétisation optimale !
+
+Il y a une démarche cohérente par rapport à un objectif donné et une distribution donnée.
+:::
+:::
+
+\
+\
+
+## Choisir une discrétisation
+
+\
+
+::: center
+![](figure/Figure-2.08.png){width="100%"}
+:::
+
+## Les différentes méthodes de discrétisation
+
+::: panel-tabset
+## Amplitudes égales
+
+[La méthode de discrétisation par amplitudes égales ou intervalles égaux **permet de créer des classes qui possèdent toutes la même étendue** :]{.p_sm}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.10.png){width="80%"}
+:::
+
+\
+
+::: p_sm
+::: callout-note
+## Avantages & inconvénients
+
+-   ✅ Facile à construire, facile à lire, conserve la forme de la distribution
+-   ❌ Optimum pour les distributions uniformes (rares) mais pas pour les distributions asymétriques
+:::
+:::
+
+## Effectifs égaux
+
+[La méthode de discrétisation par effectifs égaux ou par quantiles **permet de former des classes qui possèdent toutes le même nombre d'individus**. **La méthode Q6 basée sur les quartiles, permet d'isoler les valeurs extrêmes** :]{.p_sm}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.11.png){width="80%"}
+:::
+
+\
+
+::: p_sm
+::: callout-note
+## Avantages & inconvénients
+
+-   ✅ Transmet une information maximale
+-   ✅ Privilégie les rangs plus que les valeurs
+-   ❌ Transforme complètement la distribution
+:::
+:::
+
+## Moy. & écart-type
+
+[Cette méthode de discrétisation **permet de former des classes en fonction de la valeur de l'écart-type et de la moyenne**. Ce mode de discrétisation ne permet pas de choisir directement un nombre de classes mais permet de choisir la portion d'écart-type qui correspond à la taille d'une classe ainsi que le rôle de la moyenne (utilisée comme borne de classe ou comme centre de classe) :]{.p_sm}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.12.png){width="80%"}
+:::
+
+\
+
+::: p_sm
+::: callout-note
+## Avantages & inconvénients
+
+-   ✅ Fait référence aux caractéristiques de la distribution (moyenne, écarte-type)
+-   ✅ Permet la comparaison dans une unité commune
+-   ❌ Convient mal aux distributions asymétriques
+:::
+:::
+
+## Progression géométrique
+
+[La méthode de discrétisation par progression géométrique ou arithmétique **permet de créer des classes avec une amplitude de plus en plus importante (ou l'inverse)** :]{.p_sm}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.13.png){width="80%"}
+:::
+
+\
+
+::: p_sm
+::: callout-note
+## Avantages & inconvénients
+
+-   ✅ Convient aux distributions asymétriques produites par exemple par des processus multiplicatifs
+:::
+:::
+
+## Seuils naturels (ou jenks)
+
+[La méthode de discrétisation des seuils naturels (ou Jenks) repose sur un repose sur algorithme qui **permet de créer une discrétisation qui optimise le regroupement des valeurs similaires et à maximiser les différences entre les classes**.]{.p_sm}
+
+[Les entités sont réparties en classes dont les limites sont définies aux endroits où se trouvent de grandes différences dans les valeurs de données. Pour cette raison, **cette méthode de discrétisation peut aussi être appliquée manuellement dans le cas où des seuils sont clairement visibles à l'oeil nu** lorsque l'on observe la forme de la distribution :]{.p_sm}
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.09.png){width="80%"}
+:::
+
+::: p_sm
+::: callout-important
+## Avantages & inconvénients
+
+-   ❌ Les seuils naturels sont des classifications propres aux données et ne permettent pas de comparer plusieurs cartes.
+:::
+:::
+
+## 
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.09.png){width="80%"}
+:::
+:::
+
+## Impact d'une discrétisation
+
+\
+
+::: columns
+::: {.column width="45%"}
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/Figure-2.14.png)
+:::
+:::
+
+::: {.column width="55%"}
+::: center
+[**→ Application pédagogique**](https://mappemonde.gitpages.huma-num.fr/archives/119/){target="_blank"}
+
+\
+
+![Laurent Jégou, « Géovisualisation des discrétisations : une petite application pédagogique », Mappemonde, 119 \| 2017, https://doi.org/10.4000/mappemonde.2569](figure/jeg.png)
+:::
+:::
+:::
+
+## Discrétiser pour comparer
+
+La comparaison est un objectif spécifique de la cartographie : comparaison de deux phénomènes sur un même espace, dans le temps (évolution) ou d'un même phénomène sur deux espaces différents (ou à deux echelons différents).
+
+Dans ces cas, [le choix des discrétisations est primordiale pour l'interprétation et la comparaison du ou des phénomènes.]{.bluelg}
+
+::: panel-tabset
+## Comparaison des positions relatives
+
+::: center
+[**→ Comparer plusieurs phénomènes sur un même espace**]{.p_sm}
+
+\
+
+::: center
+**Part des cadres et des ouvriers dans la petite couronne parisienne en 1999**\
+[Utilisation de la méthode de discrétisation "moyenne et écart-type" pour les deux cartes]{.p_xsm .bluelg}
+:::
+
+![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_1.png){width="80%"}
+
+\
+
+::: center
+**Carte électorale française pour les Européennes de 2019**
+:::
+
+![](figure/carte_chor_ex.JPG){width="80%"}
+
+[Quelles critiques peut-on faire sur la comparabilité de ces trois cartes ?]{.p_xsm .bluelg}
+:::
+
+## Comparaison des positions absolues
+
+::: center
+[**→ Évolution d’un phénomène**]{.p_sm}
+
+\
+
+**Densités de population communales entre 1962 et 1999**\
+[Utilisation de la méthode de discrétisation Q6 pour les deux cartes]{.p_xsm .bluelg}
+
+![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_2.png){width="80%"}
+
+\
+
+**Densités de population communales entre 1962 et 1999**\
+[Discrétisation unique pour les deux cartes]{.p_xsm .bluelg}
+
+![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_3.png){width="80%"}
+:::
+:::
+
+# Habillage, mise en page et mise en scène
+
+## L'habillage d'une carte
+
+::: center
+![](figure/habillage.png)
+:::
+
+## Les éléments indispensables\*
+
+::: panel-tabset
+## **Le titre**\*
+
+::: p_m
+Le titre est l’**identifiant premier du sujet de la carte** il est le plus souvent disposé en haut. Il est écrit en caractères suffisamment grands et épais, mais pas disproportionnés par rapport à la carte.
+:::
+
+::: center
+![](figure/III.09.nddl.png)
+:::
+
+## **La légende**\*
+
+La légende explique l’ensemble des modes de représentation utilisés sur la carte. C’est est un élément essentiel et obligatoire de l’habillage de la carte. C’est à la fois le dictionnaire et l’index des symboles graphiques, une aide pour la lecture et l’analyse du message présenté.
+
+::: panel-tabset
+## Données quantitatives relatives
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/leg1.png)
+:::
+
+## Données quantitatives absolues
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/leg2.png)
+:::
+
+## Données qualitatives
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/leg3.png)
+:::
+
+## Positionnement
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/legpos.png)
+:::
+:::
+
+## **La date**\*
+
+Il y a plusieurs dates. La date de réalisation de la carte. La date de la source de données. La date correspondant à la donnée elle même.
+
+::: center
+![](figure/date.png){width="60%"}
+:::
+
+## **La source**\*
+
+Elle est indispensable pour les cartes statistiques elle précise l’origine et la date de l’information (date de la collecte et/ou de publication). Elle permet au lecteur d’apprécier la fiabilité du document et de recourir aux données de base si nécessaire. Elle est mentionnée discrètement.
+
+## L'échelle
+
+Elle est indispensable et se place près du cadre de la carte ou à la fin de la légende. Elle doit rester discrète. On dessine une échelle graphique plutôt qu’une échelle numérique.
+
+::: center
+![](figure/echelle.png)
+:::
+
+:::{.p_l}
+:::{.callout-note}
+L'échelle n'est pas forcément un élément indispensable selon la thématique, le territoire représenté et le public cile.
+
+Indiquez une échelle peut également s'avérer problématique selon la projection utilisée...
+:::
+:::
+
+:::{.center}
+![](figure/Barre_echelle_Mercator.png){width=70%}
+:::
+
+## L'orientation
+
+L’orientation (flèche nord) est surtout utile quand on met représente une vision inhabituelle d’un territoire.
+
+::: center
+![](figure/orientation.png)
+:::
+
+A éviter sur les cartes du Monde.
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/worldorientation.png)
+:::
+
+
+
+## Toponymes
+
+Faire apparaître les lieux importants et utile pour la lecture de la carte. Attention de ne pas utiliser trop de polices différentes.
+
+::: center
+![](figure/toponym.png)
+:::
+
+## Et aussi...
+
+::: center
+![](figure/autres.png){width="80%"}
+:::
+:::
+
+## Mise en page
+
+::: panel-tabset
+## Adapté au format et support.
+
+Les cartes ont des dimensions, qui dependent du support de publication. On adaptera la mise en page en conséquence.
+
+Si la carte est à cheval sur 2 pages, il faudra prendre en compte le pli.
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/format.png)
+:::
+
+## Occupation de l'espace
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/espace.png)
+:::
+
+## Hiérarchie de l'information
+
+La hiérarchisation, c’est la règle d’or de la mise en page. Que ce soit pour les objets géographiques représentés :
+
+::: center
+
+
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/hierarchie2.png)
+
+\
+
+Ou pour les différents éléments de mise en page :
+
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/hierarchie1.png)
+
+:::
+
+## Amélioration de la lisibilité
+
+Utilisation de défonces, halo, transparence, contrastes, détourages, ombrages…
+
+::: center
+![Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017](figure/lisibilite.png)
+:::
+
+\
+
+:::{.p_l}
+:::{.callout-note}
+Il est parfois préférable de privilégier la construction de plusieurs cartes pour faciliter la lisibilité.
+:::
+:::
+
+::: center
+![](figure/3cartes.png)
+:::
+
+:::
+
+
+## Sources & ressources
+
+:::columns
+
+:::{.column width=40%}
+![](figure/manuel.jpeg){style="border: solid;"}
+:::
+
+
+
+:::{.column .center width=60%}
+
+\
+![](figure/ManuelCarto3.png){width=77%}
+
+\
+
+:::{ .bluelg .p_M}
+Lambert, N., Zanin, C. (2016). Manuel de cartographie: Principes, méthodes, applications. Armand Colin. 
+:::
+:::
+
+:::
+
+
+:::{.p_lg}
+:::{.callout-note}
+Ce diaporama est très fortement inspiré de plusieurs supports de formation produits par l'[UAR RIATE](https://riate.cnrs.fr/){target="_blank"}. L'ensemble de ces supports sont consultables à ce [lien](https://github.com/magrit-formations){target="_blank"}. 
+:::
+:::
+
+##
+
+\
+\
+\
+\
+\
+\
+
+:::{.p_lg}
+
+> Une bonne carte énonce une multitude de petits mensonges. Elle déforme la vérité pour aider l’utilisateur à voir ce qu’il a besoin de voir (M. Monmonier, 1991)
+
+:::
+
+
+
+# Quel outils pour quel usage pour quel usage ?
+
+## Quels outils pour faire une carte ?
+
+\
+
+::: center
+![](figure/outils_carto.png){width="85%"}
+:::
+
+\
+
+:::{.p_m}
+**Magrit est une des nombreuses solutions logicielles qui permet de réaliser des cartographies thématiques. C’est une solution idéale pour le néophyte pour rentrer dans cet univers méthodologique : en quelques clics, il est possible de réaliser une représentation cartographique correctement mise en page.**
+:::
+
+Ce n’est en revanche pas un outil destiné à de la manipulation de données spatiales (sélections par attribut, manipulation de rasters, géotraitements, etc.). Pour cet usage et dans un univers clic-bouton, on privilégiera l’usage des Systèmes d’Information Géographique, comme QGIS.
+
+Pour les utilisateur·rices qui souhaitent intégrer leur représentation cartographique au sein d’une chaîne de traitement, de l’import à la cartographie et qui sont sensibles à la reproductibilité de leur analyse, on privilégiera les solutions de programmation, comme celles proposées par le logiciel R ou Python et où les écosystèmes qui permettent de gérer de l’information spatiale sont particulièrement développés. La librairie mapsf rend possible des types de représentations similaires à celles proposées par Magrit dans un univers R.
+
+Pour celles et ceux sensibles à la cartographie interactive et au portage sur le Web de leurs représentations, nous les invitons à se rapprocher des technologies JavaScript. De nombreuses librairies basées sur ce langage de programmation sont accessibles et permettent la réalisation de cartographies interactives, comme OpenLayers, mapbox ou encore Leaflet. bertin.js est d’ailleurs une librairie qui permet la réalisation de cartes thématiques pour le Web.
+
+Il est aussi important de rappeler que ces solutions techniques ne sont pas indépendantes les unes des autres : elles s’alimentent mutuellement : implémentation de chaines de traitement Python dans QGIS, adaptation des technologies leaflet dans les logiciels de programmation, etc.
+
+# Introduction au logiciel de cartographie thématique [Magrit](https://magrit.cnrs.fr/){target="_blank"}
+
+
+## Les point forts
+
+\
+
+:::{.p_l}
+
+- **Simplicité d'utilisation** (application Web sans installation nécessaire)
+
+- **Différents formats de données en entrée** (CSV, Shapefile, GeoJSON, GML, etc.)
+
+- **Personnalisation des cartes** (habillage, légende, etc.)
+
+- **Nombreuses projections cartographiques** supportées
+
+- **Export SVG** permettant de retoucher les cartes produites (Inkscape, Illustrator, etc.)
+
+- Sauvegarde d'un **fichier projet** permettant de reprendre le travail ultérieurement
+
+
+::: callout-note
+## Un logiciel d'enseignement
+
+Magrit est développé depuis 2017 par une unité d'ingénierie du CNRS (UAR RIATE) spécialisée en Géomatique et en Cartographie. Une nouvelle version, plus aboutie, sera mis à disposition au printemps 2024.
+
+En France, **Magrit est utilisé dans  de plusieurs formations universitaires pour enseigner la cartographie thématique.**
+
+:::
+
+:::
+
+
+## Démonstration
+
+\
+\
+
+:::{.center .p_xlg}
+[**&rarr; https://magrit.cnrs.fr**/](https://magrit.cnrs.fr/){target="_blank"}
+:::
+
+\
+\
+\
+
+:::columns
+
+:::{.column width=50%}
+
+:::{.p_sm}
+**Objectifs** : 
+
+- Import des données
+
+- Jointure des données
+
+- Calcul d'un nouveau champ
+
+- Représentation cartographique combinée
+
+- Habillage de la carte
+
+- Exporter de la carte
+:::
+
+:::
+
+:::{.column width=50%}
+:::{.p_sm}
+**Données utilisées** : 
+
+- [**Découpage des quartiers de Paris** (GeoJSON)](/data/demo/quartier_paris.geojson)     
+- [**Données de Population** (CSV)](/data/demo/quartier_paris_pop.csv)
+:::
+
+
+:::
+
+:::
+
+## Exercice 1 
+
+
+:::{.p_sm}
+**Consigne** : Portez une analyse critique sur cette carte, puis chercher à la reproduire avec Magrit
+:::
+
+:::columns
+
+:::{.column width=50%}
+
+![](figure/carte_uefa.png)
+:::
+
+:::{.column width=50%}
+
+\
+
+:::{.center .p_sm .bluelg}
+**Comment améliorer cette carte ?**   
+**Quelle variable visuelle devrait-on utiliser ?**
+:::
+
+\
+\
+
+:::{.center}
+**Récupération des données** :
+:::
+
+\
+
+- **Fond de carte** : [**http://naturalearthdata.com/**](https://www.naturalearthdata.com/downloads/110m-cultural-vectors/){target="_blank"} 
+
+*Récupérez le bon fond de carte : niveau de détails, présence des 50 pays concernés par le jeu de données, etc.*
+
+<!-- :::{.center} -->
+<!-- *Nuts 0 (2020) Pays européens (Polygones)* -->
+<!-- ::: -->
+\
+
+- **Statistiques** : [**data_uefa_2023.csv**](data/ex1/data_uefa_2023.csv)
+
+:::{.p_xsm}
+Source : [https://fr.wikipedia.org/wiki/Ligue_des_champions_de_l'UEFA/](https://fr.wikipedia.org/wiki/Ligue_des_champions_de_l'UEFA/){target="_blank"}
+:::
+
+:::
+
+:::
+
+
+## Exercice 1 - Correction
+
+\
+
+:::{.center}
+
+![](figure/uefa.png){width=60%}
+
+:::
+
+
+## Exercice 2
+
+
+:::{.p_sm}
+**Réaliser une carte choroplèthe de l'évolution de la population des régions sénégalaises entre 2015 et 2024**. 
+
+
+
+\
+\
+
+:::{.center}
+**Récupération des données** :
+:::
+
+\
+
+- **Fond de carte des régions sénégalaises et des pays voisins** : [**GeoSenegal.gpkg**](data/sen/GeoSenegal.gpkg) 
+
+:::{.p_xsm}
+Source : [Géo Sénégal](https://www.geosenegal.gouv.sn/), 2024
+:::
+
+\
+
+- **Statistiques démographique par région, de 2015 à 2024 ** : [**Population_2015_2024.csv**](data/sen/Population_2015_2024.csv)
+
+:::{.p_xsm}
+Source : [Agence nationale de la statistique et de la démographie](https://www.ansd.sn/){target="_blank"}, 2024
+:::
+
+:::
+
+
+## Exercice 2 - Étapes à suivre
+
+
+\
+
+:::{.p_m}
+
+- **Étape 1** : Importez les couches géographiques des pays voisins et des régions sénégalaises. Définissez la couche géographique des régions comme fond de carte principal.
+
+- **Étape 2** : Importez les données de population (*Population_2015_2024.csv*).
+
+- **Étape 3** : Réalisez une jointure entre les régions et les données démographiques (clefs de jointure  = *NAME_1* et *NAME*).
+
+- **Étape 4** : Calculez la variation de la population entre 2015 et 2024 : 
+
+      - A. Calculez le solde migratoire entre 2015 et 2024 : P2024 - P2015 = solde    
+      - B. Calculez le taux d'évolution : solde / P2015 = taux    
+      - C. Transformez le taux en pourcentage : taux * 100 = taux_evo   
+
+- **Étape 5** : Réalisez une carte choroplèthe avec cette nouvelle variable. Choisissez une méthode de discrétisation et une palette de couleurs adaptées.
+
+- **Étape 6** : Ajoutez tous les éléments indispensables et finalisez la mise en page de la carte. 
+
+- **Étape 7** : Exporter la carte en format SVG.
+
+:::
+
+
+## Exercice 2 - Correction
+
+\
+
+:::{.center}
+
+![](figure/evo-pop-fr-metropolitaine.png){width=55%}
+:::
+
+
+
+
+<!-- ## Exercice 3 -->
+
+
+<!-- :::{.p_sm} -->
+<!-- **Consigne** : Analyser la structure de l'emploi dans la région Hauts-de-France en 2014. Combiner plusieurs modes de représentation sur une même carte et mettre en œuvre des représentation cartographiques avancées. -->
+
+
+<!-- \ -->
+<!-- \ -->
+
+<!-- :::{.center} -->
+<!-- **Récupération des données** : -->
+<!-- ::: -->
+
+<!-- \ -->
+
+<!-- - **Fond de carte pays, régions et départements sénégalais** : [**Geo_Sen.zip**](data/sen/Topo1M_Senegal_shp/)  -->
+
+<!-- :::{.p_xsm} -->
+<!-- Source : [Géo Sénégal](https://www.geosenegal.gouv.sn/), 2024 -->
+<!-- ::: -->
+
+<!-- \ -->
+
+<!-- - **Statistiques démographique par département ** : [**data_sen.csv**](data/sen/Topo1M_Senegal_shp/) -->
+
+<!-- :::{.p_xsm} -->
+<!-- Source : [Agence nationale de la statistique et de la démographie](https://www.ansd.sn/){target="_blank"}, 2024 -->
+<!-- ::: -->
+
+<!-- ::: -->
+
+
+<!-- ## Exercice 3 - Étapes à suivre -->
+
+
+<!-- \ -->
+
+<!-- :::{.p_m} -->
+
+<!-- - **Étape 1** : Importer toutes les données dans Magrit et réaliser la jointure -->
+
+
+<!-- - **Étape 2** :  Choisir la ou les représentations appropriées -->
+<!-- - **Étape 3** : Habiller la carte (choix d'un titre, modification des légendes, ajout de labels, ajout du nom de l'auteur et des sources, d'un logo, etc.) -->
+<!-- - **Étape 4** :  Exporter la carte (SVG ou PNG) -->
+
+<!-- ::: -->
+
+
+<!-- ## Exercice 3 - Correction -->
+
+<!-- \ -->
+
+<!-- :::{.center} -->
+
+<!-- ![](figure/hauts-de-france-pop-emploi.png){width=73%} -->
+
+<!-- ::: -->
+
+
+## Quelques conseils...
+
+\
+
+
+:::columns
+
+:::{.column width=70%}
+
+**Ne vous limitez pas aux options d'affichage par défault**. 
+Exemple pour la legende :
+
+  - Arrondir ou choisir les valeurs affichées     
+  - Choisir la disposition (horizontale-verticale / symboles encastrés ou non)    
+  - Personnaliser le texte affiché    
+
+
+\
+
+**N'hésitez pas à utiliser les outils et effets de mise en page**.
+Exemple : 
+
+- Ajout d'un ombrage pour la couche principale
+- Outil d'alignement des éléments 
+- Utilisation de Halo (contour autour du texte)
+- Ajout d'un carton de localisation
+
+:::
+
+:::{.column width=30%}
+
+![](figure/legende_custom2.png)
+:::
+
+:::
+
+# Installer Magrit ?
+
+
+## Installer Magrit sur sa machine ?
+
+
+- Pour l'utiliser sans internet
+
+- Pour traiter des données sensibles en local
+
+- Pour bénéficier de meilleures performances
+
+- L'installer sur un Raspberry Pi pour enseigner la cartographie à une classe sans accès au Web ?
+
+## Installer Magrit avec Docker (1)
+
+:::{.center}
+![](figure/DOCKER_LOGO_CC.png)
+:::
+
+- Compatibilité : Tous les OS qui supportent Docker (Windows, Mac, Linux, etc.)
+- Prérequis : Docker installé sur votre machine
+
+## Installer Magrit avec Docker (2)
+
+En ligne de commande (option 1) :
+
+Lors de la première utilisation (téléchargement de l'image et démarrage) :
+
+     docker run -d -p "9999:9999" --name magrit magrit/magrit
+
+Pour l'arrêter :
+
+     docker stop magrit
+
+Pour le redémarrer :
+
+     docker start magrit
+     
+## Installer Magrit avec Docker (3)
+
+En utilisant le GUI Docker Desktop (option 2) :
+     
+![](figure/docker-desktop-ui.png)
+
+![](figure/docker-desktop-search-magrit.png)
+
+
+Chercher "Magrit" dans la barre de recherche, sélectionner l'image magrit/magrit et cliquer sur Pull.
+
+\
+
+![](figure/docker-desktop-images.png)
+
+Dans le menu Images, cliquer sur le bouton ▶️ de l'image magrit/magrit.
+
+
+\
+
+![](figure/docker-desktop-run-options.png)
+Renseigner le port sur lequel l'application doit être exposée (par exemple 9999).
+
+
+## Accéder Magrit en local 
+
+
+😎 Simplement en ouvrant votre navigateur à l'adresse [http://localhost:9999/](http://localhost:9999/){target="_blank"}
+
+:::{.center}
+![](figure/screenshot-magrit-local.png){width=70%}
+:::
+
+
+## 
+
+Il est ensuite possible de stopper ou de redémarrer l'application depuis le menu Containers de Docker Desktop.
+
+
+![](figure/docker-desktop-containers.png)
+
+
+Ou en ligne de commande :
+
+     docker stop magrit
+     
+     
+## Sinon... Une nouvelle verion arrive bientôt !
+
+\
+\
+\
+
+
+:::{.p_lg .center}
+
+Une nouvelle version du logiciel Magrit sera mise en ligne vers septembre 2024.
+
+\
+\
+
+Cette version proposera plus de fonctionnalités et permettra d'utiliser Magrit en local, sans connexion internet.
+
+:::
