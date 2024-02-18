@@ -1,6 +1,6 @@
-# Introduction à la cartographie thématique
+# Cartographie thématique
 
-## Rappel des fondamentaux
+## Introduction et mise en application avec [MAGRIT](https://magrit.cnrs.fr/)
 
 ### Master Géomatique, Université du Sine Saloum El-Hâdj Ibrahima NIASS
 

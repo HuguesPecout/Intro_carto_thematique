@@ -53,7 +53,7 @@ format:
 
 ::: {.column width="47%"}
 ::: center
-![La trahison des images de René Magritte (1929)](figure/magritte.jpg){style="margin-top:12px;"}
+!["La trahison des images", René Magritte (1929)](figure/magritte.jpg){style="margin-top:12px;"}
 :::
 :::
 :::
@@ -291,7 +291,7 @@ Spécificités selon les pays/cultures, ex :
 
 ## Localisation de l'information géographique
 
-[Pour être cartogarphiée, une information géographique est forcément décrite par **une position** et **une forme** **sur la surface de la Terre**.]{.p_l}
+[Pour être cartographiée, une information géographique est forcément décrite par **une position** et **une forme** **sur la surface de la Terre**.]{.p_l}
 
 \
 
@@ -996,9 +996,29 @@ Source : N. Lambert & C. Zanin, Manuel de cartographie, 2017
 
 ![Les émigrants du Globe, Minard (1862)](figure/minard.JPEG){width="80%"}
 
-![les grandes villes à Macron, les périphéries à Le Pen, AFP (2017)](figure/anamorphose.png){width="60%"}
+
+:::columns
+
+:::{.column width=70%}
+
+![Les grandes villes à Macron, les périphéries à Le Pen, AFP (2017)](figure/anamorphose.png)
+
+:::
+
+:::{.column width=30%}
+
+![Evolution des scrores par candidats et par communes, Franceinfo (2022)](figure/2017_2022.gif)
+
+:::
+
+:::
+
 
 ![](figure/barre.png){width="80%"}
+
+
+
+
 :::
 
 ## **Quantitatives relatives**
@@ -1304,23 +1324,17 @@ Dans ces cas, [le choix des discrétisations est primordiale pour l'interprétat
 
 \
 
-::: center
 **Part des cadres et des ouvriers dans la petite couronne parisienne en 1999**\
 [Utilisation de la méthode de discrétisation "moyenne et écart-type" pour les deux cartes]{.p_xsm .bluelg}
-:::
+
 
 ![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_1.png){width="80%"}
 
+:::
+
 \
 
-::: center
-**Carte électorale française pour les Européennes de 2019**
-:::
 
-![](figure/carte_chor_ex.JPG){width="80%"}
-
-[Quelles critiques peut-on faire sur la comparabilité de ces trois cartes ?]{.p_xsm .bluelg}
-:::
 
 ## Comparaison des positions absolues
 
@@ -1333,6 +1347,17 @@ Dans ces cas, [le choix des discrétisations est primordiale pour l'interprétat
 [Utilisation de la méthode de discrétisation Q6 pour les deux cartes]{.p_xsm .bluelg}
 
 ![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_2.png){width="80%"}
+:::
+
+
+
+## Discrétisation unique
+
+
+
+::: center
+
+[**→ Évolution d’un phénomène**]{.p_sm}
 
 \
 
@@ -1341,6 +1366,26 @@ Dans ces cas, [le choix des discrétisations est primordiale pour l'interprétat
 
 ![Ecole d'été « Satistiques, Cartographies et Analyse spatiale », Hélène Mathian, Youndé 2006](figure/comparaison_3.png){width="80%"}
 :::
+
+
+
+## Exemple ?
+
+::: center
+
+[**Quelles critiques peut-on faire sur la comparabilité de ces trois cartes ?**]{.p_m .bluelg}
+
+\
+
+**Carte électorale française pour les Européennes de 2019**
+
+
+![](figure/carte_chor_ex.JPG){width="80%"}
+
+:::
+
+
+
 :::
 
 # Habillage, mise en page et mise en scène
@@ -1614,7 +1659,7 @@ Il est aussi important de rappeler que ces solutions techniques ne sont pas ind�
 ::: callout-note
 ## Un logiciel d'enseignement
 
-Magrit est développé depuis 2017 par une unité d'ingénierie du CNRS (UAR RIATE) spécialisée en Géomatique et en Cartographie. Une nouvelle version, plus aboutie, sera mis à disposition au printemps 2024.
+Magrit est développé depuis 2017 par une unité d'ingénierie du CNRS (UAR RIATE) spécialisée en Géomatique et en Cartographie. Une nouvelle version, plus aboutie, sera mis à disposition en septembre 2024.
 
 En France, **Magrit est utilisé dans  de plusieurs formations universitaires pour enseigner la cartographie thématique.**
 
@@ -1662,8 +1707,8 @@ En France, **Magrit est utilisé dans  de plusieurs formations universitaires po
 :::{.p_sm}
 **Données utilisées** : 
 
-- [**Découpage des quartiers de Paris** (GeoJSON)](/data/demo/quartier_paris.geojson)     
-- [**Données de Population** (CSV)](/data/demo/quartier_paris_pop.csv)
+- [**Découpage des quartiers de Paris** (GeoJSON)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris.geojson)     
+- [**Données de Population** (CSV)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris_pop.csv)
 :::
 
 
@@ -2008,3 +2053,22 @@ Une nouvelle version du logiciel Magrit sera mise en ligne vers septembre 2024.
 Cette version proposera plus de fonctionnalités et permettra d'utiliser Magrit en local, sans connexion internet.
 
 :::
+
+
+## Diapositives libres (CC BY 4.0)
+
+\
+\
+\
+\
+
+
+:::{.p_lg .center} 
+ 
+**En ligne** : [https://huguespecout.github.io/Intro_carto_thematique/](https://huguespecout.github.io/Intro_carto_thematique/){target="_blank"}
+
+**Code source** : [https://github.com/HuguesPecout/Intro_carto_thematique](https://github.com/HuguesPecout/Intro_carto_thematique){target="_blank"}
+
+:::
+
+
