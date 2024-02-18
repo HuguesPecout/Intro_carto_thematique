@@ -1707,8 +1707,8 @@ En France, **Magrit est utilisé dans  de plusieurs formations universitaires po
 :::{.p_sm}
 **Données utilisées** : 
 
-- [**Découpage des quartiers de Paris** (GeoJSON)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris.geojson)     
-- [**Données de Population** (CSV)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris_pop.csv)
+- [**Découpage des quartiers de Paris** (GeoJSON)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris.geojson){target="_blank"}     
+- [**Données de Population** (CSV)](https://github.com/HuguesPecout/Intro_carto_thematique/blob/main/data/demo/quartier_paris_pop.csv){target="_blank"}
 :::
 
 
@@ -1841,14 +1841,14 @@ Source : [Agence nationale de la statistique et de la démographie](https://www.
 :::
 
 
-## Exercice 2 - Correction
+<!-- ## Exercice 2 - Correction -->
 
-\
+<!-- \ -->
 
-:::{.center}
+<!-- :::{.center} -->
 
-![](figure/evo-pop-fr-metropolitaine.png){width=55%}
-:::
+<!-- ![](figure/evo-pop-fr-metropolitaine.png){width=55%} -->
+<!-- ::: -->
 
 
 
@@ -1955,6 +1955,12 @@ Exemple :
 
 ## Installer Magrit sur sa machine ?
 
+\
+\
+
+
+:::{.p_l}
+
 
 - Pour l'utiliser sans internet
 
@@ -1962,7 +1968,10 @@ Exemple :
 
 - Pour bénéficier de meilleures performances
 
-- L'installer sur un Raspberry Pi pour enseigner la cartographie à une classe sans accès au Web ?
+- L'installer sur un Raspberry Pi pour enseigner la cartographie sans connexion Web ?
+
+
+:::
 
 ## Installer Magrit avec Docker (1)
 
@@ -1971,7 +1980,7 @@ Exemple :
 :::
 
 - Compatibilité : Tous les OS qui supportent Docker (Windows, Mac, Linux, etc.)
-- Prérequis : Docker installé sur votre machine
+- Prérequis : [Docker](https://www.docker.com/products/docker-desktop/) installé sur votre machine
 
 ## Installer Magrit avec Docker (2)
 
@@ -2015,11 +2024,17 @@ Renseigner le port sur lequel l'application doit être exposée (par exemple 999
 
 ## Accéder Magrit en local 
 
+\
+
+:::{.center}
+
+:::{.p_l}
 
 😎 Simplement en ouvrant votre navigateur à l'adresse [http://localhost:9999/](http://localhost:9999/){target="_blank"}
 
-:::{.center}
-![](figure/screenshot-magrit-local.png){width=70%}
+:::
+
+![](figure/screenshot-magrit-local.png){width=80%}
 :::
 
 
@@ -2036,7 +2051,7 @@ Ou en ligne de commande :
      docker stop magrit
      
      
-## Sinon... Une nouvelle verion arrive bientôt !
+## Une nouvelle verion arrive bientôt !
 
 \
 \
@@ -2045,12 +2060,12 @@ Ou en ligne de commande :
 
 :::{.p_lg .center}
 
-Une nouvelle version du logiciel Magrit sera mise en ligne vers septembre 2024.
+**Une nouvelle version du logiciel Magrit sera mise en ligne vers septembre 2024.**
 
 \
 \
 
-Cette version proposera plus de fonctionnalités et permettra d'utiliser Magrit en local, sans connexion internet.
+**Cette version proposera plus de fonctionnalités et permettra d'utiliser Magrit en local, sans connexion internet.**
 
 :::
 
